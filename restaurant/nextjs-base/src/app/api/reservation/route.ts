@@ -7,9 +7,9 @@ import {
   normalizeReservationLocale,
 } from '@/lib/reservation-emails'
 import { signReservationDecisionToken } from '@/lib/reservation-decision-token'
+import { checkRateLimit, getClientIpFromHeaders } from '@/lib/rate-limit'
+import { enforcePublicApiOrigin } from '@/lib/public-api-security'
 
-// Rate limiting simple en mémoire
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT = 3 // Max 3 soumissions
 const RATE_LIMIT_WINDOW = 10 * 60 * 1000 // 10 minutes
 const slotLocks = new Map<string, Promise<void>>()
@@ -44,16 +44,6 @@ async function withSlotLock<T>(slotKey: string, task: () => Promise<T>) {
   }
 }
 
-// Nettoyage périodique de la map
-setInterval(() => {
-  const now = Date.now()
-  for (const [ip, data] of rateLimitMap.entries()) {
-    if (now > data.resetTime) {
-      rateLimitMap.delete(ip)
-    }
-  }
-}, 60 * 1000)
-
 // Sanitization HTML
 function escapeHtml(text: string): string {
   const map: Record<string, string> = {
@@ -73,6 +63,9 @@ const resend = process.env.RESEND_API_KEY
 
 export async function POST(request: NextRequest) {
   try {
+    const originError = enforcePublicApiOrigin(request)
+    if (originError) return originError
+
     const body = await request.json()
     const {
       firstName,
@@ -97,31 +90,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Rate Limiting par IP
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('x-real-ip') ||
-      'unknown'
-    const now = Date.now()
-    const rateLimitData = rateLimitMap.get(ip)
+    // 2. Rate limiting (store distribue si UPSTASH_* configure, sinon fallback memoire)
+    const ip = getClientIpFromHeaders(request.headers)
+    const rateLimit = await checkRateLimit({
+      key: `reservation:${ip}`,
+      limit: RATE_LIMIT,
+      windowMs: RATE_LIMIT_WINDOW,
+    })
 
-    if (rateLimitData) {
-      if (now < rateLimitData.resetTime) {
-        if (rateLimitData.count >= RATE_LIMIT) {
-          return NextResponse.json(
-            {
-              error:
-                'Trop de tentatives. Veuillez réessayer dans quelques minutes.',
-            },
-            { status: 429 }
-          )
+    if (!rateLimit.allowed) {
+      const retryAfterSec = Math.max(
+        1,
+        Math.ceil((rateLimit.resetAt - Date.now()) / 1000)
+      )
+      return NextResponse.json(
+        {
+          error: 'Trop de tentatives. Veuillez reessayer dans quelques minutes.',
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(retryAfterSec),
+            'X-RateLimit-Limit': String(RATE_LIMIT),
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+            'X-RateLimit-Source': rateLimit.source,
+          },
         }
-        rateLimitData.count++
-      } else {
-        rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
-      }
-    } else {
-      rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
+      )
     }
 
     const validation = validateReservationInput({
