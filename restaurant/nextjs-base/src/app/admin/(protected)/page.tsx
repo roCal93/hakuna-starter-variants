@@ -10,7 +10,7 @@ export default function AdminHomePage() {
         Bienvenue dans l&apos;espace admin du restaurant.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
         <Link
           href="/admin/reservations"
           className="group bg-[#EBFFEE] border border-neutral-200 rounded-2xl p-8 hover:border-neutral-400 hover:shadow-md transition-all flex flex-col gap-3"
