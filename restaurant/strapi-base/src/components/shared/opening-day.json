@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_shared_opening_days",
+  "info": {
+    "displayName": "Opening Day",
+    "description": "Horaires midi/soir pour un jour"
+  },
+  "options": {},
+  "attributes": {
+    "dayLabel": {
+      "type": "enumeration",
+      "enum": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "required": true
+    },
+    "isClosedAllDay": {
+      "type": "boolean",
+      "default": false
+    },
+    "firstPeriodOpenTime": {
+      "type": "string"
+    },
+    "firstPeriodCloseTime": {
+      "type": "string"
+    },
+    "secondPeriodOpenTime": {
+      "type": "string"
+    },
+    "secondPeriodCloseTime": {
+      "type": "string"
+    }
+  }
+}

@@ -24,6 +24,7 @@ export default function AdminNav() {
   const navLinks = [
     { href: '/admin', label: 'Accueil' },
     { href: '/admin/reservations', label: 'Réservations' },
+    { href: '/admin/horaires', label: 'Horaires' },
     { href: '/admin/menu', label: 'Menus' },
   ]
 

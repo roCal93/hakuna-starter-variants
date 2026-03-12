@@ -30,9 +30,9 @@ export function isValidDateString(value: string): boolean {
 }
 
 export function isPastDate(value: string): boolean {
-  const todayMidnight = new Date()
-  todayMidnight.setHours(0, 0, 0, 0)
-  return new Date(`${value}T00:00:00`) < todayMidnight
+  // Compare as UTC date strings (YYYY-MM-DD) to avoid server-timezone drift at midnight
+  const todayUTC = new Date().toISOString().slice(0, 10)
+  return value < todayUTC
 }
 
 export function isValidReservationTime(value: string): boolean {

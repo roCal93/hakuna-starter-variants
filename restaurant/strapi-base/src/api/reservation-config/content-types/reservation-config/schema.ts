@@ -15,6 +15,11 @@ export default {
       "required": true,
       "default": 20,
       "min": 1
+    },
+    "openingDays": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.opening-day"
     }
   }
 } as const;
