@@ -1,0 +1,39 @@
+{
+  "shop": {
+    "title": "Shop",
+    "allCategories": "All",
+    "noProducts": "No products available.",
+    "unitPrice": "/ unit",
+    "addToCart": "Add to cart",
+    "outOfStock": "Out of stock",
+    "shippingNote": "Shipping calculated at checkout.",
+    "backToShop": "Back to shop"
+  },
+  "cart": {
+    "title": "My cart",
+    "empty": "Your cart is empty.",
+    "browseShop": "Browse the shop",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "shippingNote": "Shipping calculated at next step.",
+    "checkout": "Proceed to checkout",
+    "continueShopping": "Continue shopping",
+    "remove": "Remove",
+    "articles_one": "item",
+    "articles_other": "items",
+    "increaseQty": "Increase quantity",
+    "decreaseQty": "Decrease quantity",
+    "removeItem": "Remove item"
+  },
+  "checkout": {
+    "success": {
+      "title": "Order confirmed!",
+      "description": "Thank you for your purchase. You will receive a confirmation email shortly."
+    },
+    "cancel": {
+      "title": "Payment cancelled",
+      "description": "Your cart has been saved. You can resume your order at any time.",
+      "backToCart": "Back to cart"
+    }
+  }
+}

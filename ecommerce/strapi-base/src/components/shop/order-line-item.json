@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_shop_order_line_items",
+  "info": {
+    "displayName": "Order Line Item",
+    "description": "A single product line in an order"
+  },
+  "options": {},
+  "attributes": {
+    "productId": {
+      "type": "string",
+      "required": true
+    },
+    "productName": {
+      "type": "string",
+      "required": true
+    },
+    "productSlug": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "unitPrice": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "total": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    }
+  }
+}

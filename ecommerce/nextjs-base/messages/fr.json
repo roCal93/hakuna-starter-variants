@@ -1,0 +1,39 @@
+{
+  "shop": {
+    "title": "Boutique",
+    "allCategories": "Tout",
+    "noProducts": "Aucun produit disponible.",
+    "unitPrice": "/ unité",
+    "addToCart": "Ajouter au panier",
+    "outOfStock": "Rupture de stock",
+    "shippingNote": "Livraison calculée au moment du paiement.",
+    "backToShop": "Retour à la boutique"
+  },
+  "cart": {
+    "title": "Mon panier",
+    "empty": "Votre panier est vide.",
+    "browseShop": "Découvrir la boutique",
+    "summary": "Récapitulatif",
+    "subtotal": "Sous-total",
+    "shippingNote": "Frais de livraison calculés à l'étape suivante.",
+    "checkout": "Passer commande",
+    "continueShopping": "Continuer mes achats",
+    "remove": "Retirer",
+    "articles_one": "article",
+    "articles_other": "articles",
+    "increaseQty": "Augmenter la quantité",
+    "decreaseQty": "Diminuer la quantité",
+    "removeItem": "Supprimer l'article"
+  },
+  "checkout": {
+    "success": {
+      "title": "Commande confirmée !",
+      "description": "Merci pour votre achat. Vous recevrez un email de confirmation prochainement."
+    },
+    "cancel": {
+      "title": "Paiement annulé",
+      "description": "Votre panier a été conservé. Vous pouvez reprendre votre commande à tout moment.",
+      "backToCart": "Retour au panier"
+    }
+  }
+}
