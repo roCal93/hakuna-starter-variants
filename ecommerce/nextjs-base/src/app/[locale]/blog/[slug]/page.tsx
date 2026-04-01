@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { draftMode } from 'next/headers'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import { buildMetadata, type Hreflang } from '@/lib/seo'
 import { fetchBlogArticleBySlug } from '@/lib/blog'
@@ -73,12 +72,11 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { locale, slug } = await params
-  const { isEnabled } = await draftMode()
 
   const article = await fetchBlogArticleBySlug({
     slug,
     locale,
-    isDraft: isEnabled,
+    isDraft: false,
   })
 
   if (!article) {
@@ -119,12 +117,11 @@ interface Props {
 
 export default async function BlogArticlePage({ params }: Props) {
   const { locale, slug } = await params
-  const { isEnabled } = await draftMode()
 
   const article = await fetchBlogArticleBySlug({
     slug,
     locale,
-    isDraft: isEnabled,
+    isDraft: false,
   })
 
   if (!article) {

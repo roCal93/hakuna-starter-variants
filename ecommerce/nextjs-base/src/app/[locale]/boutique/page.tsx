@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatPrice } from '@/lib/currency'
-import { draftMode } from 'next/headers'
 import { createStrapiClient } from '@/lib/strapi-client'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
 import type { DynamicBlock } from '@/types/custom'
@@ -120,11 +119,10 @@ const fetchShopLandingPage = async ({
 export default async function BoutiquePage({ params, searchParams }: Props) {
   const { locale } = await params
   const { categorie } = await searchParams
-  const { isEnabled } = await draftMode()
 
   const shopPage = await fetchShopLandingPage({
     locale,
-    isDraft: isEnabled,
+    isDraft: false,
   })
   const shopSections = (shopPage?.sections || []).sort(
     (a, b) => (a.order || 0) - (b.order || 0)

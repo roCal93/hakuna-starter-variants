@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { fetchBlogArticles } from '@/lib/blog'
 import { createStrapiClient } from '@/lib/strapi-client'
 import { SectionGeneric } from '@/components/sections/SectionGeneric'
@@ -80,7 +79,6 @@ const formatPublicationDate = (date: string | undefined, locale: string) => {
 export default async function BlogPage({ params, searchParams }: Props) {
   const { locale } = await params
   const { page } = await searchParams
-  const { isEnabled } = await draftMode()
 
   const currentPage = Number(page || '1')
   const safePage =
@@ -88,13 +86,13 @@ export default async function BlogPage({ params, searchParams }: Props) {
 
   const articleRes = await fetchBlogArticles({
     locale,
-    isDraft: isEnabled,
+    isDraft: false,
     page: safePage,
     pageSize: PAGE_SIZE,
   })
   const blogPage = await fetchBlogLandingPage({
     locale,
-    isDraft: isEnabled,
+    isDraft: false,
   })
   const blogSections = (blogPage?.sections || []).sort(
     (a, b) => (a.order || 0) - (b.order || 0)
