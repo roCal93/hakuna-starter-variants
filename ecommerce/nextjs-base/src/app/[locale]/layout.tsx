@@ -1,6 +1,5 @@
 import React from 'react'
 import { LangSetter } from '@/components/locale'
-import { PageTransition } from '@/components/animations/PageTransition'
 import { notFound } from 'next/navigation'
 import { isSupportedLocale } from '@/lib/supported-locales'
 import { CartProvider } from '@/components/cart/CartContext'
@@ -28,10 +27,10 @@ export default async function LocaleLayout({
   return (
     <CartProvider>
       <CartDrawer />
-      <PageTransition>
-        <LangSetter lang={locale} />
-        {children}
-      </PageTransition>
+        <>
+          <LangSetter lang={locale} />
+          {children}
+        </>
     </CartProvider>
   )
 }
