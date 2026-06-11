@@ -159,7 +159,6 @@ export default async function BoutiquePage({ params, searchParams }: Props) {
               identifier={section.identifier}
               title={section.hideTitle ? undefined : section.title}
               blocks={section.blocks as DynamicBlock[]}
-              locale={locale}
               containerWidth={normalizeContainerWidth(section.containerWidth)}
               spacingTop={
                 section.spacingTop as

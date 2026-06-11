@@ -76,6 +76,27 @@ function isDuplicateStripeSessionError(
   )
 }
 
+async function orderExistsInStrapi(stripeSessionId: string): Promise<boolean> {
+  const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL
+  const writeToken = process.env.STRAPI_WRITE_API_TOKEN
+  if (!strapiUrl || !writeToken) return false
+
+  try {
+    const res = await fetch(
+      `${strapiUrl}/api/orders?filters[stripeSessionId][$eq]=${encodeURIComponent(stripeSessionId)}&fields[0]=documentId&pagination[pageSize]=1`,
+      {
+        headers: { Authorization: `Bearer ${writeToken}` },
+        cache: 'no-store',
+      }
+    )
+    if (!res.ok) return false
+    const json = (await res.json()) as { data?: unknown[] }
+    return (json.data?.length ?? 0) > 0
+  } catch {
+    return false
+  }
+}
+
 async function createOrderInStrapi(
   session: Stripe.Checkout.Session
 ): Promise<{ created: boolean }> {
@@ -84,6 +105,15 @@ async function createOrderInStrapi(
 
   if (!strapiUrl || !writeToken) {
     throw new Error('Strapi env vars (URL or WRITE TOKEN) are not configured')
+  }
+
+  // Persistent deduplication check: survives server restarts unlike the in-memory rate-limit.
+  const alreadyExists = await orderExistsInStrapi(session.id)
+  if (alreadyExists) {
+    console.info(
+      `[webhook] Order already exists in Strapi for session ${session.id}, skipping creation`
+    )
+    return { created: false }
   }
 
   const cartItems = session.metadata?.cartItems
@@ -192,18 +222,21 @@ async function decrementStockInStrapi(
 
   if (!strapiUrl || !writeToken) return
 
-  await Promise.all(
+  const results = await Promise.allSettled(
     cartItems.map(async (item) => {
       const getRes = await fetch(
         `${strapiUrl}/api/products/${item.id}?fields[0]=stock&fields[1]=active`,
         { headers: { Authorization: `Bearer ${writeToken}` } }
       )
-      if (!getRes.ok) return
+      if (!getRes.ok) {
+        console.warn(`[webhook] Failed to fetch stock for product ${item.id} (${getRes.status})`)
+        return
+      }
 
       const { data } = (await getRes.json()) as { data: { stock: number; active: boolean } }
       const newStock = Math.max(0, (data.stock ?? 0) - item.quantity)
 
-      await fetch(`${strapiUrl}/api/products/${item.id}`, {
+      const putRes = await fetch(`${strapiUrl}/api/products/${item.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -211,8 +244,17 @@ async function decrementStockInStrapi(
         },
         body: JSON.stringify({ data: { stock: newStock } }),
       })
+      if (!putRes.ok) {
+        console.warn(`[webhook] Failed to decrement stock for product ${item.id} (${putRes.status})`)
+      }
     })
   )
+
+  for (const result of results) {
+    if (result.status === 'rejected') {
+      console.error('[webhook] Unexpected error decrementing stock:', result.reason)
+    }
+  }
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

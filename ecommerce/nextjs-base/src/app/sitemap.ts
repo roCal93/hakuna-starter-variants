@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { createStrapiClient } from '@/lib/strapi-client'
 import type { Page } from '@/types/strapi'
-import { fetchBlogSitemapEntries } from '@/lib/blog'
 
 const buildAbsoluteUrl = (path = '/'): string => {
   const base = (
@@ -22,7 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       apiToken: process.env.STRAPI_API_TOKEN,
     })
     const res = await client.findMany<Page>('pages', { populate: '*' })
-    const blogEntries = await fetchBlogSitemapEntries()
 
     const pages = (res?.data || []).filter((p: Page) => !p.noIndex)
     const now = new Date()
@@ -44,33 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
     })
 
-    const blogIndexEntries = [
-      {
-        url: buildAbsoluteUrl('/fr/blog'),
-        lastModified: now,
-        changeFrequency: 'weekly' as const,
-      },
-      {
-        url: buildAbsoluteUrl('/en/blog'),
-        lastModified: now,
-        changeFrequency: 'weekly' as const,
-      },
-    ]
-
-    const blogArticleEntries = blogEntries.flatMap((article) => {
-      const allLocales = [
-        { locale: article.locale, slug: article.slug },
-        ...(article.localizations || []),
-      ].filter((entry) => entry.locale && entry.slug)
-
-      return allLocales.map((entry) => ({
-        url: buildAbsoluteUrl(`/${entry.locale}/blog/${entry.slug}`),
-        lastModified: now,
-        changeFrequency: 'weekly' as const,
-      }))
-    })
-
-    return [...pageEntries, ...blogIndexEntries, ...blogArticleEntries]
+    return [...pageEntries]
   } catch (error) {
     console.error('Erreur lors de la génération du sitemap:', error)
     return [
