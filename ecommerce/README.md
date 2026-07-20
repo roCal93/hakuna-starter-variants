@@ -2,6 +2,11 @@
 
 Overlay e-commerce à appliquer par-dessus `hakuna-mataweb-starter` pour créer une boutique en ligne avec Stripe Checkout.
 
+## Prérequis pour le claim produit
+
+Le flow d'activation / claim produit suppose un espace client authentifié.
+Appliquez aussi l'overlay `hakuna-starter-variants/espace-client` si vous voulez activer ces routes en production.
+
 ## Ce que ce variant ajoute
 
 ### Strapi (`strapi-base/`)
@@ -10,6 +15,7 @@ Overlay e-commerce à appliquer par-dessus `hakuna-mataweb-starter` pour créer 
 | `product` | Produit (nom, slug, prix, stock, images, catégorie, i18n) |
 | `product-category` | Catégorie de produits (i18n) |
 | `order` | Commande créée automatiquement après paiement Stripe |
+| `product-record` | Dossier produit (propriété client) et assignation propriétaire |
 
 **Composants partagés Strapi (`src/components/shop/`) :**
 - `order-line-item` — ligne d'article dans une commande
@@ -23,10 +29,15 @@ Overlay e-commerce à appliquer par-dessus `hakuna-mataweb-starter` pour créer 
 - `[locale]/panier` — page panier
 - `[locale]/checkout/success` — confirmation de commande
 - `[locale]/checkout/cancel` — paiement annulé
+- `[locale]/activation` — entrée courte d'activation produit
+- `[locale]/espace-client/activation` — page d'activation produit
+- `[locale]/espace-client/claim` — fallback de saisie code
 
 **API routes :**
 - `POST /api/checkout/session` — crée une Stripe Checkout Session
 - `POST /api/webhooks/stripe` — webhook Stripe → crée l'ordre dans Strapi
+- `POST /api/product-claim` — associe un dossier produit au compte client
+- `GET /api/product-claim/link` — génère lien + code d'activation
 
 **Composants cart :**
 - `CartContext` — état global du panier (React Context + useReducer + localStorage)
@@ -60,7 +71,14 @@ Configurer les permissions publiques dans **Settings → Users & Permissions →
 - `product` : `find`, `findOne`
 - `product-category` : `find`, `findOne`
 
+Si vous activez le flow claim produit, configurer aussi dans **Authenticated** :
+- `product-record` : `find`, `findOne`
+
 Créer un token API **read-only** et un token **full-access** (pour le webhook).
+
+Ordre recommandé des overlays pour le claim produit :
+1. `espace-client`
+2. `ecommerce`
 
 ### 2. Next.js
 
@@ -69,6 +87,21 @@ Copier `.env.example` → `.env.local` et renseigner :
 - `STRAPI_WRITE_API_TOKEN` — token full-access Strapi
 - `STRIPE_SECRET_KEY` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — dashboard Stripe (mode test)
 - `STRIPE_WEBHOOK_SECRET` — voir ci-dessous
+
+Dans Strapi (`strapi-base/.env`), pour les emails transactionnels de commande :
+- `RESEND_API_KEY`
+- `ORDER_EMAIL_FROM`
+- `ORDER_SELLER_EMAIL` (email vendeur destinataire des nouvelles ventes; fallback `ADMIN_EMAIL`)
+- `ORDER_EMAIL_TEST_RECIPIENT` (optionnel, utile en test avec `onboarding@resend.dev`)
+
+Pour le flow claim/activation produit :
+- `CLAIM_ASSIGN_SECRET`
+- `ADMIN_EMAIL`
+
+Dans Next.js (`nextjs-base/.env.local`) :
+- `PRODUCT_CLAIM_CODE_SECRET` (ou fallback `AUTH_SECRET`)
+- `CLAIM_QR_BASE_URL` (optionnel, fallback `NEXT_PUBLIC_SITE_URL`)
+- `CLAIM_ASSIGN_SECRET` (doit matcher Strapi)
 
 ### 3. Webhook Stripe en développement
 

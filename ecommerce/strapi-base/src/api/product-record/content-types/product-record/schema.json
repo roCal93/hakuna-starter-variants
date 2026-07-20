@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_records",
+  "info": {
+    "singularName": "product-record",
+    "pluralName": "product-records",
+    "displayName": "Product Record",
+    "description": "Ownership dossier linked to a sold product"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reference": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["sold", "owned", "archived"],
+      "default": "sold"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::order.order"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "required": true
+    }
+  }
+}

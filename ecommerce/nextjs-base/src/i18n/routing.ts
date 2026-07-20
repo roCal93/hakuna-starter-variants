@@ -18,6 +18,10 @@ export const routing = defineRouting({
     },
     "/checkout/success": "/checkout/success",
     "/checkout/cancel": "/checkout/cancel",
+    "/activation": {
+      fr: "/activation",
+      en: "/activation",
+    },
     "/blog": {
       fr: "/blog",
       en: "/blog",

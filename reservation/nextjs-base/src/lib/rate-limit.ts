@@ -120,12 +120,27 @@ async function upstashRateLimit(
 export async function checkRateLimit(
   input: RateLimitInput
 ): Promise<RateLimitResult> {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    (!process.env.UPSTASH_REDIS_REST_URL ||
+      !process.env.UPSTASH_REDIS_REST_TOKEN)
+  ) {
+    throw new Error(
+      'UPSTASH_REDIS_REST_URL et UPSTASH_REDIS_REST_TOKEN sont requis en production pour le rate limiting distribué'
+    )
+  }
+
   const remote = await upstashRateLimit(input)
   if (remote) return remote
   return localRateLimit(input)
 }
 
 export function getClientIpFromHeaders(headers: Headers): string {
+  const vercelForwarded = headers.get('x-vercel-forwarded-for')
+  if (vercelForwarded) {
+    return vercelForwarded.split(',')[0].trim()
+  }
+
   const forwarded = headers.get('x-forwarded-for')
   if (forwarded) {
     return forwarded.split(',')[0].trim()
