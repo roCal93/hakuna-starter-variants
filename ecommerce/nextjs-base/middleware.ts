@@ -49,7 +49,7 @@ function buildCsp(nonce: string): string {
   return directives.join('; ')
 }
 
-export default function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // Stripe CLI often forwards to /webhook in local dev: keep it out of locale middleware.
@@ -89,6 +89,8 @@ export default function middleware(req: NextRequest) {
   response.headers.set('Content-Security-Policy', csp)
   return response
 }
+
+export default middleware
 
 export const config = {
   // Match all request paths except for Next.js internals, API routes, webhook, and static files

@@ -1,0 +1,52 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "dependencies": [],
+  "packageDependencies": {
+    "nextjs": {
+      "dependencies": {
+        "stripe": "^22.6.2",
+        "next-intl": "^4.12.0"
+      },
+      "devDependencies": {}
+    },
+    "strapi": {
+      "dependencies": {},
+      "devDependencies": {}
+    }
+  },
+  "options": {
+    "productClaim": {
+      "default": false,
+      "requires": ["espace-client"],
+      "env": {
+        "nextjs": [
+          { "name": "PRODUCT_CLAIM_CODE_SECRET", "required": true, "secret": true, "example": "changeme", "description": "Product claim code secret" },
+          { "name": "CLAIM_ASSIGN_SECRET", "required": true, "secret": true, "example": "changeme", "description": "Product claim assignment secret" },
+          { "name": "CLAIM_QR_BASE_URL", "required": false, "secret": false, "example": "http://localhost:3000", "description": "Optional product claim QR base URL" },
+          { "name": "ADMIN_EMAIL", "required": false, "secret": false, "example": "admin@example.com", "description": "Admin email excluded from automatic claims" }
+        ],
+        "strapi": [
+          { "name": "CLAIM_ASSIGN_SECRET", "required": true, "secret": true, "example": "changeme", "description": "Product claim assignment secret" }
+        ]
+      }
+    }
+  },
+  "env": {
+    "nextjs": [
+        { "name": "STRIPE_SECRET_KEY", "required": true, "secret": true, "example": "sk_test_", "description": "Stripe server-side secret key" },
+        { "name": "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY", "required": true, "secret": false, "example": "pk_test_", "description": "Stripe publishable key" },
+        { "name": "STRIPE_WEBHOOK_SECRET", "required": true, "secret": true, "example": "whsec_", "description": "Stripe webhook signing secret" },
+        { "name": "ADMIN_EMAIL", "required": false, "secret": false, "example": "admin@example.com", "description": "Ecommerce admin email" },
+        { "name": "ORDER_EMAIL_FROM", "required": false, "secret": false, "example": "onboarding@resend.dev", "description": "Order email sender" },
+        { "name": "ORDER_SELLER_EMAIL", "required": false, "secret": false, "example": "seller@example.com", "description": "Order seller recipient" },
+        { "name": "ORDER_EMAIL_TEST_RECIPIENT", "required": false, "secret": false, "example": "ci@example.com", "description": "Order email test recipient" }
+      ],
+      "strapi": [
+        { "name": "RESEND_API_KEY", "required": false, "secret": true, "example": "", "description": "Resend API key for order emails" },
+        { "name": "ORDER_EMAIL_FROM", "required": false, "secret": false, "example": "onboarding@resend.dev", "description": "Order email sender" },
+        { "name": "ORDER_SELLER_EMAIL", "required": false, "secret": false, "example": "seller@example.com", "description": "Order seller recipient" },
+        { "name": "ORDER_EMAIL_TEST_RECIPIENT", "required": false, "secret": false, "example": "ci@example.com", "description": "Order email test recipient" }
+      ]
+  }
+}

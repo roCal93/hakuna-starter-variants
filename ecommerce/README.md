@@ -82,7 +82,9 @@ Ordre recommandé des overlays pour le claim produit :
 
 ### 2. Next.js
 
-Copier `.env.example` → `.env.local` et renseigner :
+Les variables d'environnement sont déclarées dans `feature.json` (section `env`).
+La CLI agrège ces déclarations et génère le `.env.example` final, puis initialise
+`.env.local`. Renseigner notamment :
 - `STRAPI_API_TOKEN` — token read-only Strapi
 - `STRAPI_WRITE_API_TOKEN` — token full-access Strapi
 - `STRIPE_SECRET_KEY` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — dashboard Stripe (mode test)

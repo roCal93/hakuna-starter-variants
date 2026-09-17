@@ -1,0 +1,20 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "dependencies": [],
+  "packageDependencies": {
+    "nextjs": {
+      "dependencies": {},
+      "devDependencies": {}
+    },
+    "strapi": {
+      "dependencies": {},
+      "devDependencies": {}
+    }
+  },
+  "options": {},
+  "env": {
+    "nextjs": [],
+    "strapi": []
+  }
+}

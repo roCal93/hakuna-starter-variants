@@ -6,8 +6,8 @@ import CopyUrlInput from './CopyUrlInput'
 export const dynamic = 'force-dynamic'
 
 // Guard: ADMIN_SECRET must be explicitly defined — no hardcoded fallback allowed
-if (!process.env.ADMIN_SECRET && process.env.NODE_ENV === 'production') {
-  throw new Error('ADMIN_SECRET must be set in production')
+if (!process.env.WEDDING_ADMIN_SECRET && !process.env.ADMIN_SECRET && process.env.NODE_ENV === 'production') {
+  throw new Error('WEDDING_ADMIN_SECRET must be set in production')
 }
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
@@ -37,11 +37,11 @@ type StrapiListResponse = {
 }
 
 async function checkAdminCookie(): Promise<boolean> {
-  const ADMIN_SECRET = process.env.ADMIN_SECRET
-  if (!ADMIN_SECRET) return false
+  const adminSecret = process.env.WEDDING_ADMIN_SECRET ?? process.env.ADMIN_SECRET
+  if (!adminSecret) return false
   const cookieStore = await cookies()
   const adminAuth = cookieStore.get('admin_auth')?.value
-  return adminAuth === ADMIN_SECRET
+  return adminAuth === adminSecret
 }
 
 async function getAllGuests(): Promise<Guest[]> {
@@ -67,7 +67,7 @@ export default async function AdminInvitationsPage() {
   const isAuthorized = await checkAdminCookie()
 
   if (!isAuthorized) {
-    redirect('/admin/login')
+    redirect('/admin/invitations/login')
   }
 
   const guests = await getAllGuests()

@@ -1,0 +1,28 @@
+{
+  "name": "wedding-rsvp",
+  "version": "1.0.0",
+  "dependencies": [],
+  "packageDependencies": {
+    "nextjs": {
+      "dependencies": {
+        "resend": "^6.26.0"
+      },
+      "devDependencies": {}
+    },
+    "strapi": {
+      "dependencies": {},
+      "devDependencies": {}
+    }
+  },
+  "options": {},
+  "env": {
+    "nextjs": [
+      { "name": "WEDDING_ADMIN_SECRET", "required": true, "secret": true, "example": "changeme", "description": "Wedding RSVP admin login secret" },
+      { "name": "WEDDING_ORGANIZER_EMAIL", "required": true, "secret": false, "example": "organizer@example.com", "description": "Wedding organizer email" },
+      { "name": "RESEND_API_KEY", "required": false, "secret": true, "example": "", "description": "Resend API key" },
+      { "name": "RESEND_FROM_EMAIL", "required": false, "secret": false, "example": "onboarding@resend.dev", "description": "Wedding email sender" },
+      { "name": "STRAPI_API_TOKEN", "required": false, "secret": true, "example": "", "description": "Strapi read API token" }
+    ],
+    "strapi": []
+  }
+}

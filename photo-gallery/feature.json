@@ -1,0 +1,26 @@
+{
+  "name": "photo-gallery",
+  "version": "1.0.0",
+  "dependencies": [],
+  "packageDependencies": {
+    "nextjs": {
+      "dependencies": {},
+      "devDependencies": {}
+    },
+    "strapi": {
+      "dependencies": {},
+      "devDependencies": {}
+    }
+  },
+  "options": {},
+  "env": {
+    "nextjs": [
+      { "name": "STRAPI_URL", "required": true },
+      { "name": "STRAPI_API_TOKEN", "required": true, "secret": true, "example": "", "description": "Strapi read API token" },
+      { "name": "STRAPI_WRITE_API_TOKEN", "required": true, "secret": true, "example": "", "description": "Strapi write API token" },
+      { "name": "BUNNY_CDN_URL", "required": false, "secret": false, "example": "", "description": "Bunny CDN base URL" },
+      { "name": "NEXT_PUBLIC_UPLOAD_PARALLELISM", "required": false, "secret": false, "example": "2", "description": "Parallel upload count" }
+    ],
+    "strapi": []
+  }
+}

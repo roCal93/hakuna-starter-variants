@@ -1,0 +1,47 @@
+{
+  "name": "reservation",
+  "version": "1.0.0",
+  "dependencies": [],
+  "packageDependencies": {
+    "nextjs": {
+      "dependencies": {
+        "resend": "^6.26.0"
+      },
+      "devDependencies": {}
+    },
+    "strapi": {
+      "dependencies": {},
+      "devDependencies": {}
+    }
+  },
+  "options": {},
+  "env": {
+    "nextjs": [
+      { "name": "NEXT_PUBLIC_SCHEMA_DESCRIPTION", "required": false, "secret": false, "example": "Restaurant experience with seasonal cuisine", "description": "Restaurant schema description" },
+      { "name": "NEXT_PUBLIC_SCHEMA_LOGO", "required": false, "secret": false, "example": "", "description": "Restaurant schema logo URL" },
+      { "name": "NEXT_PUBLIC_SCHEMA_TELEPHONE", "required": false, "secret": false, "example": "", "description": "Restaurant schema telephone" },
+      { "name": "NEXT_PUBLIC_SCHEMA_EMAIL", "required": false, "secret": false, "example": "", "description": "Restaurant schema email" },
+      { "name": "NEXT_PUBLIC_SCHEMA_STREET_ADDRESS", "required": false, "secret": false, "example": "", "description": "Restaurant schema street address" },
+      { "name": "NEXT_PUBLIC_SCHEMA_CITY", "required": false, "secret": false, "example": "", "description": "Restaurant schema city" },
+      { "name": "NEXT_PUBLIC_SCHEMA_POSTAL_CODE", "required": false, "secret": false, "example": "", "description": "Restaurant schema postal code" },
+      { "name": "NEXT_PUBLIC_SCHEMA_COUNTRY", "required": false, "secret": false, "example": "FR", "description": "Restaurant schema country" },
+      { "name": "NEXT_PUBLIC_SCHEMA_AREA_SERVED", "required": false, "secret": false, "example": "", "description": "Restaurant schema service area" },
+      { "name": "NEXT_PUBLIC_SCHEMA_PRICE_RANGE", "required": false, "secret": false, "example": "EUR 20-60", "description": "Restaurant schema price range" },
+      { "name": "NEXT_PUBLIC_SCHEMA_CUISINE", "required": false, "secret": false, "example": "French", "description": "Restaurant schema cuisine" },
+      { "name": "NEXT_PUBLIC_SCHEMA_MENU", "required": false, "secret": false, "example": "", "description": "Restaurant schema menu URL" },
+      { "name": "NEXT_PUBLIC_SCHEMA_ACCEPTS_RESERVATIONS", "required": false, "secret": false, "example": "true", "description": "Restaurant schema reservation flag" },
+      { "name": "NEXT_PUBLIC_SCHEMA_LATITUDE", "required": false, "secret": false, "example": "", "description": "Restaurant schema latitude" },
+      { "name": "NEXT_PUBLIC_SCHEMA_LONGITUDE", "required": false, "secret": false, "example": "", "description": "Restaurant schema longitude" },
+      { "name": "NEXT_PUBLIC_SCHEMA_SAME_AS", "required": false, "secret": false, "example": "", "description": "Restaurant schema social URLs" },
+      { "name": "NEXT_PUBLIC_SCHEMA_OPENING_HOURS", "required": false, "secret": false, "example": "", "description": "Restaurant schema opening hours JSON" },
+      { "name": "ADMIN_USERNAME", "required": true, "secret": false, "example": "admin", "description": "Reservation admin username" },
+      { "name": "ADMIN_PASSWORD", "required": true, "secret": true, "example": "changeme", "description": "Reservation admin password" },
+      { "name": "ADMIN_SECRET", "required": true, "secret": true, "example": "changeme", "description": "HMAC signing secret for reservation admin sessions" },
+      { "name": "RESERVATION_DECISION_SECRET", "required": false, "secret": true, "example": "changeme", "description": "Reservation decision token secret" },
+      { "name": "RESEND_API_KEY", "required": false, "secret": true, "example": "", "description": "Resend API key for reservation emails" },
+      { "name": "RESEND_FROM_EMAIL", "required": false, "secret": false, "example": "onboarding@resend.dev", "description": "Reservation email sender" },
+      { "name": "CONTACT_EMAIL", "required": false, "secret": false, "example": "contact@example.com", "description": "Reservation contact recipient" }
+    ],
+    "strapi": []
+  }
+}

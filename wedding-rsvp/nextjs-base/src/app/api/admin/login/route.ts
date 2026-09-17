@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
-  const ADMIN_SECRET = process.env.ADMIN_SECRET
+  const adminSecret = process.env.WEDDING_ADMIN_SECRET ?? process.env.ADMIN_SECRET
 
   // Guard: ADMIN_SECRET must be explicitly set — no default allowed
-  if (!ADMIN_SECRET) {
-    console.error('[Admin] ADMIN_SECRET is not set in environment variables')
+  if (!adminSecret) {
+    console.error('[Admin] WEDDING_ADMIN_SECRET is not set in environment variables')
     return NextResponse.json(
       { error: 'Administration non configurée. Définissez ADMIN_SECRET.' },
       { status: 503 }
@@ -22,14 +22,14 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!body.secret || body.secret !== ADMIN_SECRET) {
+  if (!body.secret || body.secret !== adminSecret) {
     return NextResponse.json({ error: 'Secret invalide' }, { status: 401 })
   }
 
   const isProd = process.env.NODE_ENV === 'production'
 
   const response = NextResponse.json({ success: true })
-  response.cookies.set('admin_auth', ADMIN_SECRET, {
+  response.cookies.set('admin_auth', adminSecret, {
     httpOnly: true,
     secure: isProd,
     sameSite: 'strict',

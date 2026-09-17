@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import BlockedSlotsModal from './BlockedSlotsModal.tsx'
-import MaxCoversModal from './MaxCoversModal.tsx'
+import BlockedSlotsModal from './BlockedSlotsModal'
+import MaxCoversModal from './MaxCoversModal'
 import { Button } from '@/components/ui/Button'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
