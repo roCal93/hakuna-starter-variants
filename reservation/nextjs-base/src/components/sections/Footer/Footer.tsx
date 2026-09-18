@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 type FooterProps = {
   siteName?: string
+  locale?: string
 }
 
 export const Footer = ({ siteName = 'Hakuna Mataweb' }: FooterProps) => {
